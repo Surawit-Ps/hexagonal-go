@@ -4,6 +4,7 @@ import "gorm.io/gorm"
 
 type Room struct {
 	gorm.Model
-	Capacity int `json:"capacity" gorm:"type:int;not null"`
-	Status   string `json:"status" gorm:"type:varchar(255);not null"`
+	Name     string `gorm:"type:varchar(255);not null"`
+	Capacity int    `gorm:"not null"`
+	Status   string `gorm:"type:varchar(255);not null"`
 }

@@ -1,8 +1,9 @@
 package service
 
 import (
-	"Hexa/domain/repository"
 	"Hexa/domain/entity"
+	"Hexa/domain/repository"
+	"log"
 )
 
 type BookingService struct {
@@ -18,7 +19,15 @@ func (s *BookingService) AddBooking(booking *entity.Booking) error {
 }
 
 func (s *BookingService) GetBooking(id uint) (*entity.Booking, error) {
-	return s.Repo.GetBookingByID(id)
+	booking ,err := s.Repo.GetBookingByID(id)
+	if err != nil {
+		return nil, err
+	}
+	if booking == nil {
+		log.Printf("Booking with ID %d not found", id)
+		return nil, err
+	}
+	return booking, err
 }
 
 func (s *BookingService) UpdateBooking(booking *entity.Booking) error {

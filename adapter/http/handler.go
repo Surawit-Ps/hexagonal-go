@@ -1,10 +1,12 @@
 package http
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"Hexa/domain/entity"
 	"Hexa/domain/service"
+	"log"
 	"strconv"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type Handler struct {
@@ -36,6 +38,7 @@ func (h *Handler) GetBooking(c *fiber.Ctx) error {
 	}
 	booking, err := h.Service.GetBooking(uint(idUint))
 	if err != nil {	
+		log.Printf("Error retrieving booking with ID %d: %v", idUint, err)
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Booking not found"})
 	}
 	return c.JSON(booking)

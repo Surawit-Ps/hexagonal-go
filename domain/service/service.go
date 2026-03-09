@@ -3,6 +3,7 @@ package service
 import (
 	"Hexa/domain/entity"
 	"Hexa/domain/repository"
+	"errors"
 	"log"
 )
 
@@ -19,15 +20,16 @@ func (s *BookingService) AddBooking(booking *entity.Booking) error {
 }
 
 func (s *BookingService) GetBooking(id uint) (*entity.Booking, error) {
-	booking ,err := s.Repo.GetBookingByID(id)
+	booking, err := s.Repo.GetBookingByID(id)
 	if err != nil {
 		return nil, err
 	}
 	if booking == nil {
 		log.Printf("Booking with ID %d not found", id)
-		return nil, err
+		var ErrBookingNotFound = errors.New("booking not found")
+		return nil, ErrBookingNotFound
 	}
-	return booking, err
+	return booking, nil
 }
 
 func (s *BookingService) UpdateBooking(booking *entity.Booking) error {
@@ -41,6 +43,3 @@ func (s *BookingService) DeleteBooking(id uint) error {
 func (s *BookingService) GetBookingsByUserID(userID uint) ([]*entity.Booking, error) {
 	return s.Repo.GetBookingsByUserID(userID)
 }
-
-
-

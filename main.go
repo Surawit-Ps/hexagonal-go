@@ -7,7 +7,7 @@ import (
 
 func main() {
 	// Initialize dependency container with mock data
-	container := NewContainer(true) // Set to false to use SQL database
+	container := NewContainer(false) // Set to false to use SQL database
 
 	// Initialize Fiber app
 	app := fiber.New()

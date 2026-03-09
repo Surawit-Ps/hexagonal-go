@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"Hexa/adapter/http"
 	"Hexa/adapter/persistence/mockdata"
@@ -36,6 +37,7 @@ func NewContainer(useMock bool) *Container {
 		}
 	}
 
+	
 
 	var bookingService *service.BookingService
 	var userService *service.UserService
@@ -79,11 +81,39 @@ func initDatabase() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	User := []entity.User{
+		{Name: "Alice", Email: "alice@example.com"},
+		{Name: "Bob", Email: "bob@example.com"},
+		{Name: "Charlie", Email: "charlie@example.com"},
+		{Name: "David", Email: "david@example.com"},
+	}
+	Room := []entity.Room{
+		{Name: "Conference Room A", Capacity: 10, Status: "available"},
+		{Name: "Conference Room B", Capacity: 20, Status: "available"},
+		{Name: "Conference Room C", Capacity: 15, Status: "available"},
+		{Name: "Conference Room D", Capacity: 25, Status: "available"},
+	}
+
+	Booking := []entity.Booking{
+		{UserID: 1, RoomID: 1, StartTime: time.Now(), EndTime: time.Now().Add(time.Hour)},
+		{UserID: 2, RoomID: 2, StartTime: time.Now(), EndTime: time.Now().Add(time.Hour)},
+		{UserID: 3, RoomID: 3, StartTime: time.Now(), EndTime: time.Now().Add(time.Hour)},
+		{UserID: 4, RoomID: 4, StartTime: time.Now(), EndTime: time.Now().Add(time.Hour)},
+	}
 
 
 	err = db.AutoMigrate(&entity.User{}, &entity.Room{}, &entity.Booking{})
 	if err != nil {
 		return nil, err
+	}
+	for _, user := range User {
+		db.FirstOrCreate(&user, entity.User{Email: user.Email})
+	}
+	for _, room := range Room {
+		db.FirstOrCreate(&room, entity.Room{Name: room.Name})
+	}
+	for _, booking := range Booking {
+		db.FirstOrCreate(&booking, entity.Booking{UserID: booking.UserID, RoomID: booking.RoomID})
 	}
 
 	return db, nil

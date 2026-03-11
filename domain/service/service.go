@@ -19,7 +19,7 @@ func (s *BookingService) AddBooking(booking *entity.Booking) error {
 	return s.Repo.CreateBooking(booking)
 }
 
-func (s *BookingService) GetBooking(id uint) (*entity.Booking, error) {
+func (s *BookingService) GetBooking(id uint) (*entity.BookingResponse, error) {
 	booking, err := s.Repo.GetBookingByID(id)
 	if err != nil {
 		return nil, err
@@ -29,7 +29,15 @@ func (s *BookingService) GetBooking(id uint) (*entity.Booking, error) {
 		var ErrBookingNotFound = errors.New("booking not found")
 		return nil, ErrBookingNotFound
 	}
-	return booking, nil
+
+	BookingResponse := &entity.BookingResponse{
+		ID: booking.ID,
+		UserID: booking.UserID,
+		RoomID: booking.RoomID,
+		StartTime: booking.StartTime,
+		EndTime: booking.EndTime,
+	}
+	return BookingResponse, nil
 }
 
 func (s *BookingService) UpdateBooking(booking *entity.Booking) error {

@@ -19,7 +19,7 @@ func (s *Sql) CreateBooking(booking *entity.Booking) error {
 	return s.DB.Create(booking).Error
 }
 
-func (s *Sql) GetBookingByID(id uint) (*entity.Booking, error) {
+func (s *Sql) GetBookingByID(id string) (*entity.Booking, error) {
 	var booking entity.Booking
 	if err := s.DB.First(&booking, id).Error; err != nil {
 		return nil, err
@@ -28,14 +28,15 @@ func (s *Sql) GetBookingByID(id uint) (*entity.Booking, error) {
 }
 
 func (s *Sql) UpdateBooking(booking *entity.Booking) error {
-	return s.DB.Save(booking).Error
+	SQLBooking := toSQLBooking(booking)
+	return s.DB.Save(&SQLBooking).Error
 }
 
-func (s *Sql) DeleteBooking(id uint) error {
+func (s *Sql) DeleteBooking(id string) error {
 	return s.DB.Delete(&entity.Booking{}, id).Error
 }
 
-func (s *Sql) GetBookingsByUserID(userID uint) ([]*entity.Booking, error) {
+func (s *Sql) GetBookingsByUserID(userID string) ([]*entity.Booking, error) {
 	var bookings []*entity.Booking
 	if err := s.DB.Where("user_id = ?", userID).Find(&bookings).Error; err != nil {
 		return nil, err
@@ -56,7 +57,7 @@ func (s *SqlUser) CreateUser(user *entity.User) error {
 	return s.DB.Create(user).Error
 }
 
-func (s *SqlUser) GetUserByID(id uint) (*entity.User, error) {
+func (s *SqlUser) GetUserByID(id string) (*entity.User, error) {
 	var user entity.User
 	if err := s.DB.First(&user, id).Error; err != nil {
 		return nil, err
@@ -68,7 +69,7 @@ func (s *SqlUser) UpdateUser(user *entity.User) error {
 	return s.DB.Save(user).Error
 }
 
-func (s *SqlUser) DeleteUser(id uint) error {
+func (s *SqlUser) DeleteUser(id string) error {
 	return s.DB.Delete(&entity.User{}, id).Error
 }
 
@@ -93,7 +94,7 @@ func (s *SqlRoom) CreateRoom(room *entity.Room) error {
 	return s.DB.Create(room).Error
 }
 
-func (s *SqlRoom) GetRoomByID(id uint) (*entity.Room, error) {
+func (s *SqlRoom) GetRoomByID(id string) (*entity.Room, error) {
 	var room entity.Room
 	if err := s.DB.First(&room, id).Error; err != nil {
 		return nil, err
@@ -105,7 +106,7 @@ func (s *SqlRoom) UpdateRoom(room *entity.Room) error {
 	return s.DB.Save(room).Error
 }
 
-func (s *SqlRoom) DeleteRoom(id uint) error {
+func (s *SqlRoom) DeleteRoom(id string) error {
 	return s.DB.Delete(&entity.Room{}, id).Error
 }
 

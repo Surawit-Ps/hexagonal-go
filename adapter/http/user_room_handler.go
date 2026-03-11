@@ -31,11 +31,7 @@ func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 
 func (h *UserHandler) GetUser(c *fiber.Ctx) error {
 	id := c.Params("id")
-	idUint, err := strconv.ParseUint(id, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
-	}
-	user, err := h.Service.GetUser(uint(idUint))
+	user, err := h.Service.GetUser(id)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
 	}
@@ -53,7 +49,7 @@ func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(&user); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
-	user.ID = uint(idUint)
+	user.ID = strconv.FormatUint(idUint, 10)
 	if err := h.Service.UpdateUser(&user); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update user"})
 	}
@@ -62,11 +58,7 @@ func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
 
 func (h *UserHandler) DeleteUser(c *fiber.Ctx) error {
 	id := c.Params("id")
-	idUint, err := strconv.ParseUint(id, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
-	}
-	if err := h.Service.DeleteUser(uint(idUint)); err != nil {
+	if err := h.Service.DeleteUser(id); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to delete user"})
 	}
 	c.SendStatus(fiber.StatusNoContent)
@@ -105,11 +97,7 @@ func (h *RoomHandler) CreateRoom(c *fiber.Ctx) error {
 
 func (h *RoomHandler) GetRoom(c *fiber.Ctx) error {
 	id := c.Params("id")
-	idUint, err := strconv.ParseUint(id, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
-	}
-	room, err := h.Service.GetRoom(uint(idUint))
+	room, err := h.Service.GetRoom(id)
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Room not found"})
 	}
@@ -127,7 +115,7 @@ func (h *RoomHandler) UpdateRoom(c *fiber.Ctx) error {
 	if err := c.BodyParser(&room); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
-	room.ID = uint(idUint)
+	room.ID = strconv.FormatUint(idUint, 10)
 	if err := h.Service.UpdateRoom(&room); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update room"})
 	}
@@ -136,11 +124,7 @@ func (h *RoomHandler) UpdateRoom(c *fiber.Ctx) error {
 
 func (h *RoomHandler) DeleteRoom(c *fiber.Ctx) error {
 	id := c.Params("id")
-	idUint, err := strconv.ParseUint(id, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
-	}
-	if err := h.Service.DeleteRoom(uint(idUint)); err != nil {
+	if err := h.Service.DeleteRoom(id); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to delete room"})
 	}
 	c.SendStatus(fiber.StatusNoContent)

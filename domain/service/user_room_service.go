@@ -17,7 +17,7 @@ func (s *UserService) AddUser(user *entity.User) error {
 	return s.Repo.CreateUser(user)
 }
 
-func (s *UserService) GetUser(id uint) (*entity.User, error) {
+func (s *UserService) GetUser(id string) (*entity.User, error) {
 	return s.Repo.GetUserByID(id)
 }
 
@@ -25,7 +25,7 @@ func (s *UserService) UpdateUser(user *entity.User) error {
 	return s.Repo.UpdateUser(user)
 }
 
-func (s *UserService) DeleteUser(id uint) error {
+func (s *UserService) DeleteUser(id string) error {
 	return s.Repo.DeleteUser(id)
 }
 
@@ -46,7 +46,7 @@ func (s *RoomService) AddRoom(room *entity.Room) error {
 	return s.Repo.CreateRoom(room)
 }
 
-func (s *RoomService) GetRoom(id uint) (*entity.Room, error) {
+func (s *RoomService) GetRoom(id string) (*entity.Room, error) {
 	return s.Repo.GetRoomByID(id)
 }
 
@@ -54,7 +54,7 @@ func (s *RoomService) UpdateRoom(room *entity.Room) error {
 	return s.Repo.UpdateRoom(room)
 }
 
-func (s *RoomService) DeleteRoom(id uint) error {
+func (s *RoomService) DeleteRoom(id string) error {
 	return s.Repo.DeleteRoom(id)
 }
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"time"
 
 	"Hexa/adapter/http"
 	"Hexa/adapter/persistence/mockdata"
@@ -94,13 +93,6 @@ func initDatabase() (*gorm.DB, error) {
 		{Name: "Conference Room D", Capacity: 25, Status: "available"},
 	}
 
-	Booking := []entity.Booking{
-		{UserID: 1, RoomID: 1, StartTime: time.Now(), EndTime: time.Now().Add(time.Hour)},
-		{UserID: 2, RoomID: 2, StartTime: time.Now(), EndTime: time.Now().Add(time.Hour)},
-		{UserID: 3, RoomID: 3, StartTime: time.Now(), EndTime: time.Now().Add(time.Hour)},
-		{UserID: 4, RoomID: 4, StartTime: time.Now(), EndTime: time.Now().Add(time.Hour)},
-	}
-
 
 	err = db.AutoMigrate(&entity.User{}, &entity.Room{}, &entity.Booking{})
 	if err != nil {
@@ -111,9 +103,6 @@ func initDatabase() (*gorm.DB, error) {
 	}
 	for _, room := range Room {
 		db.FirstOrCreate(&room, entity.Room{Name: room.Name})
-	}
-	for _, booking := range Booking {
-		db.FirstOrCreate(&booking, entity.Booking{UserID: booking.UserID, RoomID: booking.RoomID})
 	}
 
 	return db, nil

@@ -2,6 +2,7 @@ package mockdata
 
 import (
 	"Hexa/domain/entity"
+	"strconv"
 	"time"
 )
 
@@ -32,48 +33,42 @@ func NewMockData() *MockData {
 func (m *MockData) initializeSampleData() {
 	// Add sample users
 	m.Users = []*entity.User{
-		{Name: "John Doe", Email: "john@example.com", Password: "pass123"},
-		{Name: "Jane Smith", Email: "jane@example.com", Password: "pass123"},
-		{Name: "Bob Johnson", Email: "bob@example.com", Password: "pass123"},
+		{ID: strconv.FormatUint(1, 10), Name: "John Doe", Email: "john@example.com"},
+		{ID: strconv.FormatUint(2, 10), Name: "Jane Smith", Email: "jane@example.com"},
+		{ID: strconv.FormatUint(3, 10), Name: "Bob Johnson", Email: "bob@example.com"},
 	}
-	m.Users[0].ID = 1
-	m.Users[1].ID = 2
-	m.Users[2].ID = 3
 
 	// Add sample rooms
 	m.Rooms = []*entity.Room{
-		{Name: "Room A", Capacity: 10, Status: "available"},
-		{Name: "Room B", Capacity: 20, Status: "booked"},
-		{Name: "Room C", Capacity: 15, Status: "available"},
+		{ID: strconv.FormatUint(1, 10), Name: "Room A", Capacity: 10, Status: "available"},
+		{ID: strconv.FormatUint(2, 10), Name: "Room B", Capacity: 20, Status: "booked"},
+		{ID: strconv.FormatUint(3, 10), Name: "Room C", Capacity: 15, Status: "available"},
 	}
-	m.Rooms[0].ID = 1
-	m.Rooms[1].ID = 2
-	m.Rooms[2].ID = 3
 
 	// Add sample bookings
 	m.Bookings = []*entity.Booking{
 		{
-			UserID:    1,
-			RoomID:    2,
+			ID:        strconv.FormatUint(1, 10),
+			UserID:    strconv.FormatUint(1, 10),
+			RoomID:    strconv.FormatUint(2, 10),
 			StartTime: time.Date(2024, time.June, 1, 9, 0, 0, 0, time.UTC),
 			EndTime:   time.Date(2024, time.June, 1, 10, 0, 0, 0, time.UTC),
 		},
 		{
-			UserID:    2,
-			RoomID:    1,
+			ID:        strconv.FormatUint(2, 10),
+			UserID:    strconv.FormatUint(2, 10),
+			RoomID:    strconv.FormatUint(1, 10),
 			StartTime: time.Date(2024, time.June, 2, 14, 0, 0, 0, time.UTC),
 			EndTime:   time.Date(2024, time.June, 2, 15, 0, 0, 0, time.UTC),
 		},
 		{
-			UserID:    3,
-			RoomID:    3,
+			ID:        strconv.FormatUint(3, 10),
+			UserID:    strconv.FormatUint(3, 10),
+			RoomID:    strconv.FormatUint(3, 10),
 			StartTime: time.Date(2024, time.June, 3, 11, 0, 0, 0, time.UTC),
 			EndTime:   time.Date(2024, time.June, 3, 12, 0, 0, 0, time.UTC),
 		},
 	}
-	m.Bookings[0].ID = 1
-	m.Bookings[1].ID = 2
-	m.Bookings[2].ID = 3
 
 	m.userID = 3
 	m.roomID = 3
@@ -83,12 +78,12 @@ func (m *MockData) initializeSampleData() {
 // ===== Booking Repository Implementation =====
 func (m *MockData) CreateBooking(booking *entity.Booking) error {
 	m.bookingID++
-	booking.ID = m.bookingID
+	booking.ID = strconv.FormatUint(uint64(m.bookingID), 10)
 	m.Bookings = append(m.Bookings, booking)
 	return nil
 }
 
-func (m *MockData) GetBookingByID(id uint) (*entity.Booking, error) {
+func (m *MockData) GetBookingByID(id string) (*entity.Booking, error) {
 	for _, booking := range m.Bookings {
 		if booking.ID == id {
 			return booking, nil
@@ -107,7 +102,7 @@ func (m *MockData) UpdateBooking(booking *entity.Booking) error {
 	return nil
 }
 
-func (m *MockData) DeleteBooking(id uint) error {
+func (m *MockData) DeleteBooking(id string) error {
 	for i, booking := range m.Bookings {
 		if booking.ID == id {
 			m.Bookings = append(m.Bookings[:i], m.Bookings[i+1:]...)
@@ -117,7 +112,7 @@ func (m *MockData) DeleteBooking(id uint) error {
 	return nil
 }
 
-func (m *MockData) GetBookingsByUserID(userID uint) ([]*entity.Booking, error) {
+func (m *MockData) GetBookingsByUserID(userID string) ([]*entity.Booking, error) {
 	var bookings []*entity.Booking
 	for _, booking := range m.Bookings {
 		if booking.UserID == userID {
@@ -130,12 +125,12 @@ func (m *MockData) GetBookingsByUserID(userID uint) ([]*entity.Booking, error) {
 // ===== User Repository Implementation =====
 func (m *MockData) CreateUser(user *entity.User) error {
 	m.userID++
-	user.ID = m.userID
+	user.ID = strconv.FormatUint(uint64(m.userID), 10)
 	m.Users = append(m.Users, user)
 	return nil
 }
 
-func (m *MockData) GetUserByID(id uint) (*entity.User, error) {
+func (m *MockData) GetUserByID(id string) (*entity.User, error) {
 	for _, user := range m.Users {
 		if user.ID == id {
 			return user, nil
@@ -154,7 +149,7 @@ func (m *MockData) UpdateUser(user *entity.User) error {
 	return nil
 }
 
-func (m *MockData) DeleteUser(id uint) error {
+func (m *MockData) DeleteUser(id string) error {
 	for i, user := range m.Users {
 		if user.ID == id {
 			m.Users = append(m.Users[:i], m.Users[i+1:]...)
@@ -171,12 +166,12 @@ func (m *MockData) GetAllUsers() ([]*entity.User, error) {
 // ===== Room Repository Implementation =====
 func (m *MockData) CreateRoom(room *entity.Room) error {
 	m.roomID++
-	room.ID = m.roomID
+	room.ID = strconv.FormatUint(uint64(m.roomID), 10)
 	m.Rooms = append(m.Rooms, room)
 	return nil
 }
 
-func (m *MockData) GetRoomByID(id uint) (*entity.Room, error) {
+func (m *MockData) GetRoomByID(id string) (*entity.Room, error) {
 	for _, room := range m.Rooms {
 		if room.ID == id {
 			return room, nil
@@ -195,7 +190,7 @@ func (m *MockData) UpdateRoom(room *entity.Room) error {
 	return nil
 }
 
-func (m *MockData) DeleteRoom(id uint) error {
+func (m *MockData) DeleteRoom(id string) error {
 	for i, room := range m.Rooms {
 		if room.ID == id {
 			m.Rooms = append(m.Rooms[:i], m.Rooms[i+1:]...)

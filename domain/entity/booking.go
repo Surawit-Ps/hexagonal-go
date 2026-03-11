@@ -1,20 +1,20 @@
 package entity
 
-import ("gorm.io/gorm"
+import (
 	"time")
 
 type Booking struct {
-	gorm.Model
-	UserID uint  `gorm:"not null"`
-	RoomID uint  `gorm:"not null"`
-	StartTime time.Time  `gorm:"not null"`
-	EndTime time.Time  `gorm:"not null"`
+	ID string
+	UserID string  
+	RoomID string  
+	StartTime time.Time  
+	EndTime time.Time  
 }
 
 type BookingResponse struct {
-	ID uint `json:"id"`
-	UserID uint `json:"user_id"`
-	RoomID uint `json:"room_id"`
+	ID string `json:"id"`
+	UserID string `json:"user_id"`
+	RoomID string `json:"room_id"`
 	StartTime time.Time `json:"start_time"`
 	EndTime time.Time `json:"end_time"`
 }

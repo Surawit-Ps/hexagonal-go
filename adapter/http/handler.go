@@ -4,7 +4,6 @@ import (
 	"Hexa/domain/entity"
 	"Hexa/domain/service"
 	"log"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -32,13 +31,9 @@ func (h *Handler) CreateBooking(c *fiber.Ctx) error {
 
 func (h *Handler) GetBooking(c *fiber.Ctx) error {
 	id := c.Params("id")
-	idUint, err := strconv.ParseUint(id, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
-	}
-	booking, err := h.Service.GetBooking(uint(idUint))
+	booking, err := h.Service.GetBooking(id)
 	if err != nil {	
-		log.Printf("Error retrieving booking with ID %d: %v", idUint, err)
+		log.Printf("Error retrieving booking with ID %s: %v", id, err)
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Booking not found"})
 	}
 	return c.JSON(booking)
@@ -46,16 +41,12 @@ func (h *Handler) GetBooking(c *fiber.Ctx) error {
 
 func (h *Handler) UpdateBooking(c *fiber.Ctx) error {
 	id := c.Params("id")
-	idUint, err := strconv.ParseUint(id, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
-	}
 
 	var booking entity.Booking
 	if err := c.BodyParser(&booking); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
-	booking.ID = uint(idUint)
+	booking.ID = id
 	if err := h.Service.UpdateBooking(&booking); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to update booking"})
 	}
@@ -64,11 +55,8 @@ func (h *Handler) UpdateBooking(c *fiber.Ctx) error {
 
 func (h *Handler) DeleteBooking(c *fiber.Ctx) error {
 	id := c.Params("id")
-	idUint, err := strconv.ParseUint(id, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
-	}
-	if err := h.Service.DeleteBooking(uint(idUint)); err != nil {
+
+	if err := h.Service.DeleteBooking(id); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to delete booking"})
 	}
 	c.SendStatus(fiber.StatusNoContent)
@@ -77,11 +65,8 @@ func (h *Handler) DeleteBooking(c *fiber.Ctx) error {
 
 func (h *Handler) GetBookingsByUserID(c *fiber.Ctx) error {
 	userID := c.Params("userID")
-	userIDUint, err := strconv.ParseUint(userID, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid userID"})
-	}
-	bookings, err := h.Service.GetBookingsByUserID(uint(userIDUint))
+
+	bookings, err := h.Service.GetBookingsByUserID(userID)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to retrieve bookings"})
 	}

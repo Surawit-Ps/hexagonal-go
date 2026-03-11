@@ -1,16 +1,15 @@
 package entity
 
-import "gorm.io/gorm"
 
 type Room struct {
-	gorm.Model
-	Name     string `gorm:"type:varchar(255);not null"`
-	Capacity int    `gorm:"not null"`
-	Status   string `gorm:"type:varchar(255);not null"`
+	ID string
+	Name     string 
+	Capacity int    
+	Status   string `validate:"required,oneof='available' 'occupied' 'maintenance'"`
 }
 
 type RoomResponse struct {
-	ID       uint   `json:"id"`
+	ID       string   `json:"id"`
 	Name     string `json:"name"`
 	Capacity int    `json:"capacity"`
 	Status   string `json:"status"`
